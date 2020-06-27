@@ -42,13 +42,13 @@ def add_file():
 					os.remove(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER, filename))
 					file.save(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER, filename))
 					print('updated time series file')
-          timeSeries_df.readData(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER))
-          print(timeSeries_df.parsed_data)
+          			timeSeries_df.readData(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER))
+          			print(timeSeries_df.parsed_data)
 				else:
 					file.save(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER, filename))
 					print("time series file saved!")
-          timeSeries_df.readData(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER))
-          print(timeSeries_df.parsed_data)
+          			timeSeries_df.readData(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER))
+          			print(timeSeries_df.parsed_data)
 			# daily report file
 			else:
 				filename = secure_filename(file.filename)
@@ -58,13 +58,13 @@ def add_file():
 					os.remove(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER, filename))
 					file.save(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER, filename))
 					print('updated daily report file')
-          dailyReport_df.readData(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER))
-          print(dailyReport_df.parsed_data)
+          			dailyReport_df.readData(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER))
+          			print(dailyReport_df.parsed_data)
 				else:
 					file.save(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER, filename))
 					print("time daily report saved!")
-          dailyReport_df.readData(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER))
-          print(dailyReport_df.parsed_data)
+          			dailyReport_df.readData(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER))
+          			print(dailyReport_df.parsed_data)
 			return redirect('/')
 	return render_template('monitor.html')
 
