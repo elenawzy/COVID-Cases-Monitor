@@ -51,5 +51,32 @@ def add_file():
 					print("time daily report saved!")
 			return redirect('/')
 	return render_template('monitor.html')
+
+@app.route('/filter-time-series', methods=["GET", "POST"])
+def filter_time_series():
+	return render_template('filter-time-series.html')
+
+@app.route('/filter-daily', methods=["GET", "POST"])
+def filter_daily():
+	return render_template('filter-daily.html')
+
+@app.route('/return-time-series-data', methods=["GET", "POST"])
+def return_time_series_data():
+	if request.method == "POST":
+		# check that there isn't any empty data inputs for any of the options (probably will not happen)
+		if (all(x in request.files for x in ["province", "country", "start-date", "end-date", "data-format"])):
+			print('missing one or more filter options')
+			return redirect('/filter-time-series')
+	return "time series data"
+
+@app.route('/return-daily-data', methods=["GET", "POST"])
+def return_daily_data():
+	if request.method == "POST":
+		# check that there isn't any empty data inputs for any of the options (probably will not happen)
+		if (all(x in request.files for x in ["province", "country", "start-date", "end-date", "data-content", "data-format"])):
+			print('missing one or more filter options')
+			return redirect('/filter-daily')
+	return "daily report data"
+
 if __name__ == "__main__":
 	app.run(debug = True)
