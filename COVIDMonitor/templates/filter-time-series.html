@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Filter Time Series Data</title>
+
+  <!-- favicon-->
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/monitor.css') }}">
+  <!-- Bootstrap Scripts -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <!-- Nav bar-->
+  <nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand">
+      🦠 COVID Monitor</a>
+  </nav>
+
+  <div class="container-md">
+    <h3>How would you like to filter Time Series data?</h3>
+    <form action="/return-time-series-data" method="post" enctype="multipart/form-data">
+
+      <div class="form-group">
+        <label for="timeSeriesProvince">Province</label>
+        <input name="province" type="text" class="form-control" id="timeSeriesProvince" placeholder="Enter a province">
+      </div>
+
+      <div class="form-group">
+        <label for="timeSeriesCountry">Country</label>
+        <input name="country" type="text" class="form-control" id="timeSeriesCountry" placeholder="Enter a country">
+      </div>
+
+      <div class="form-group">
+        <label for="timeSeriesStartDate">Start Date </label>
+        <input name="start-date" type="text" class="form-control" id="timeSeriesStartDate" placeholder="Format: mm/dd/yyyy">
+      </div>
+
+      <div class="form-group">
+        <label for="timeSeriesEndDate">End Date (leave blank if only one date is desired)</label>
+        <input name="end-date" type="text" class="form-control" id="timeSeriesEndDate" placeholder="Format: mm/dd/yyyy">
+      </div>
+
+      <div class="form-group">
+        <label for="timeSeriesDataFormat">Select Data Format</label>
+        <select name="data-format" class="form-control" id="timeSeriesDataFormat">
+          <option value="text">Text</option>
+          <option value="csv">csv</option>
+          <option value="json">JSON</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-success">Submit filters</button>
+
+    </form>
+  </div>
+
+</body>
+
+</html>
