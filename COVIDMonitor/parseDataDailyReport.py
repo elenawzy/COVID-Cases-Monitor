@@ -5,6 +5,9 @@ from datetime import datetime
 from datetime import timedelta
 from glob import glob
 
+PATH = "./resultfiles"
+TEMPLATES = "./templates"
+
 
 class DailyReportData:
 
@@ -53,7 +56,26 @@ class DailyReportData:
         time_changed = self.parsed_data
         time_changed['Last_Update'] = time_changed['Last_Update'].dt.strftime(
             '%m/%d/%Y')
+        time_changed.to_json(os.path.join(
+            PATH, "json_export_daily_report.json"))
         return time_changed.to_json()
+
+    def exportCsv(self):
+        time_changed = self.parsed_data
+        time_changed['Last_Update'] = time_changed['Last_Update'].dt.strftime(
+            '%m/%d/%Y')
+        time_changed.to_csv(os.path.join(
+            PATH, "csv_export_daily_report.csv"), index=False)
+        return time_changed.to_csv(index=False)
+
+    def exportTxt(self):
+        time_changed = self.parsed_data
+        time_changed['Last_Update'] = time_changed['Last_Update'].dt.strftime(
+            '%m/%d/%Y')
+        with open(os.path.join(PATH, 'txt_export_daily_report.html'), 'w') as fo1:
+            fo1.write(time_changed.to_html(index=False))
+        with open(os.path.join(TEMPLATES, 'txt_export_daily_report.html'), 'w') as fo2:
+            fo2.write(time_changed.to_html(index=False))
 
 
 def queryCountry(dataframe, countries):
