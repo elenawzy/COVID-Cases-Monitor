@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 import os
-import parseDataTimeSeries
-import parseDataDailyReport
+from project import parseDataDailyReport
+from project import parseDataTimeSeries
 import pandas as pd
 
 CSV_FOLDER = "csvfiles"
