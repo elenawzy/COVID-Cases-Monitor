@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 import os
-from parseDataTimeSeries import TimeSeriesData
-from parseDataDailyReport import DailyReportData
+import parseDataTimeSeries
+import parseDataDailyReport
 import pandas as pd
 
 CSV_FOLDER = "csvfiles"
@@ -13,8 +13,8 @@ app = Flask("Assignment 2")
 app.debug = True
 app.config["ROOT_PATH"] = app.root_path
 
-timeSeries_df = TimeSeriesData()
-dailyReport_df = DailyReportData()
+timeSeries_df = parseDataTimeSeries.TimeSeriesData()
+dailyReport_df = parseDataDailyReport.DailyReportData()
 
 
 @app.route('/')
@@ -110,7 +110,12 @@ def return_time_series_data():
         if request.form["data-format"] == "json":
             export_data = timeSeries_df.exportJson()
             return export_data
-        return "not json"
+        elif request.form["data-format"] == "csv":
+            export_data = timeSeries_df.exportCsv()
+            return export_data
+        else:
+            timeSeries_df.exportTxt()
+            return render_template('txt_export_time_series.html')
     return "time series data"
 
 
@@ -136,7 +141,12 @@ def return_daily_data():
         if request.form["data-format"] == "json":
             export_data = dailyReport_df.exportJson()
             return export_data
-        return "not json"
+        elif request.form["data-format"] == "csv":
+            export_data = dailyReport_df.exportCsv()
+            return export_data
+        else:
+            dailyReport_df.exportTxt()
+            return render_template('txt_export_daily_report.html')
     return "daily report data"
 
 
