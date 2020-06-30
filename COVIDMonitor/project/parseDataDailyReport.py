@@ -4,16 +4,16 @@ import os
 from datetime import datetime
 from datetime import timedelta
 from glob import glob
+from .interface import parseDataInterface
 
 PATH = "./resultfiles"
 TEMPLATES = "./templates"
 
 
-class DailyReportData:
+class DailyReportData(parseDataInterface.DataInterface):
 
     def __init__(self):
-        self.original_data = pd.DataFrame()
-        self.parsed_data = pd.DataFrame()
+        super().__init__()
 
     def readData(self, path):
         files = glob(os.path.join(path, "*.csv"))
@@ -25,10 +25,10 @@ class DailyReportData:
                    'Confirmed', 'Deaths', 'Recovered', 'Active', 'Combined_Key']
         concatenated_df = concatenated_df[columns]
         self.original_data = concatenated_df
-        self.parsed_data = self.original_data
+        self.parsed_data = concatenated_df
 
     def queryData(self, countries=[], provinces=[], startingDate='', endingDate='', data_content=''):
-        df = self.original_data
+        df = self.parsed_data
         if countries != ['']:
             df = queryCountry(df, countries)
 
@@ -48,9 +48,6 @@ class DailyReportData:
             else:
                 df = queryActive(df)
         self.parsed_data = df
-
-    def refreshParsedData(self):
-        self.parsed_data = self.original_data
 
     def exportJson(self):
         time_changed = self.parsed_data
