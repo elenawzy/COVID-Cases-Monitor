@@ -29,18 +29,13 @@
     <form action="/return-daily-data" method="post" enctype="multipart/form-data">
 
       <div class="form-group">
-        <label for="dailyProvince">Province (for multiple entries please split each entry with ";"  i.e. "Ontario;Quebec")</label>
+        <label for="dailyProvince">Province (for multiple entries please split each entries with ";"  ie. Ontario;Quebec)</label>
         <input name="province" type="text" class="form-control" id="dailyProvince" placeholder="Enter a province">
       </div>
 
       <div class="form-group">
-        <label for="dailyCountry">Country (for multiple entries please split each entry with ";"  i.e. "Canada;US")</label>
+        <label for="dailyCountry">Country (for multiple entries please split each entries with ";"  ie. Canada;US)</label>
         <input name="country" type="text" class="form-control" id="dailyCountry" placeholder="Enter a country">
-      </div>
-
-      <div class="form-group">
-        <label for="dailyCombined">Combined_Keys</label>
-        <input name="combined" type="text" class="form-control" id="dailyCombined" placeholder="Enter combined_keys">
       </div>
 
       <div class="form-group">
@@ -54,24 +49,24 @@
       </div>
 
       <div class="form-group">
-        <label for="dailyDataContent">Select Data Metric</label>
+        <label for="dailyDataContent">Select Data Content</label>
         <select name="data-content" class="form-control data-content-select" id="dailyDataContent">
-          <option value="active">Active Cases</option>
-          <option value="confirmed">Confirmed Cases</option>
           <option value="deaths">Deaths</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="active">Active</option>
           <option value="recovered">Recovered</option>
         </select>
       <br>
       <div class="form-group">
         <label for="dailyDataFormat">Select Data Format</label>
         <select name="data-format" class="form-control" id="dailyDataFormat">
-          <option value="csv">CSV</option>
+          <option value="text">Text</option>
+          <option value="csv">csv</option>
           <option value="json">JSON</option>
-          <option value="text">Text (printed)</option>
         </select>
       </div>
 
-      <button type="submit" class="btn btn-success">Submit Filters</button>
+      <button type="submit" class="btn btn-success">Submit filters</button>
 
     </form>
   </div>
