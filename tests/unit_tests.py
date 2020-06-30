@@ -55,7 +55,7 @@ def test_daily_query_data():
     daily_report.readData(os.path.join(
         os.getcwd(), "tests", "test_csv", "test_daily"))
     daily_report.queryData(["US"], [
-                           "South Carolina"], "01/01/2020", "09/01/2020", "confirmed")
+                           "South Carolina"], ["Abbeville, South Carolina, US"], "01/01/2020", "09/01/2020", "confirmed")
     check_equal_original = pd.DataFrame(
         {"Province_State": ["South Carolina"], "Country_Region": ["US"], "Last_Update": [datetime(2020, 6, 25, 0, 0, 0)], "Confirmed": [91], "Deaths": [0], "Recovered": [0], "Active": [91], "Combined_Key": ["Abbeville, South Carolina, US"]})
     check_equal_parsed = pd.DataFrame(
@@ -69,8 +69,8 @@ def test_daily_export_json():
     daily_report = parseDataDailyReport.DailyReportData()
     daily_report.readData(os.path.join(
         os.getcwd(), "tests", "test_csv", "test_daily"))
-    daily_report.queryData(["US"], ["South Carolina"],
-                           "01/01/2020", "09/01/2020", "confirmed")
+    daily_report.queryData(["US"], [
+                           "South Carolina"], ["Abbeville, South Carolina, US"], "01/01/2020", "09/01/2020", "confirmed")
     json = daily_report.exportJson(
         os.path.join(os.getcwd(), "tests", "test_result"))
 
@@ -82,8 +82,8 @@ def test_daily_export_csv():
     daily_report = parseDataDailyReport.DailyReportData()
     daily_report.readData(os.path.join(
         os.getcwd(), "tests", "test_csv", "test_daily"))
-    daily_report.queryData(["US"], ["South Carolina"],
-                           "01/01/2020", "09/01/2020", "confirmed")
+    daily_report.queryData(["US"], [
+                           "South Carolina"], ["Abbeville, South Carolina, US"], "01/01/2020", "09/01/2020", "confirmed")
     csv = daily_report.exportCsv(
         os.path.join(os.getcwd(), "tests", "test_result"))
 
@@ -95,8 +95,8 @@ def test_daily_export_txt():
     daily_report = parseDataDailyReport.DailyReportData()
     daily_report.readData(os.path.join(
         os.getcwd(), "tests", "test_csv", "test_daily"))
-    daily_report.queryData(["US"], ["South Carolina"],
-                           "01/01/2020", "09/01/2020", "confirmed")
+    daily_report.queryData(["US"], [
+                           "South Carolina"], ["Abbeville, South Carolina, US"], "01/01/2020", "09/01/2020", "confirmed")
     daily_report.exportTxt(os.path.join(
         os.getcwd(), "tests", "test_result"), '')
 

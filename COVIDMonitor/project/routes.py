@@ -17,11 +17,11 @@ DAILY_REPORT_FOLDER = "dailyreports"
 timeSeries_df = parseDataTimeSeries.TimeSeriesData()
 dailyReport_df = parseDataDailyReport.DailyReportData()
 
+
 def configure_routes(app):
     @app.route('/')
     def welcome_monitor():
         return render_template('monitor.html')
-
 
     @app.route('/addfile', methods=["GET", "POST"])
     def add_file():
@@ -79,16 +79,13 @@ def configure_routes(app):
                 return redirect('/')
         return render_template('monitor.html')
 
-
     @app.route('/filter-time-series', methods=["GET", "POST"])
     def filter_time_series():
         return render_template('filter-time-series.html')
 
-
     @app.route('/filter-daily', methods=["GET", "POST"])
     def filter_daily():
         return render_template('filter-daily.html')
-
 
     @app.route('/return-time-series-data', methods=["GET", "POST"])
     def return_time_series_data():
@@ -119,7 +116,6 @@ def configure_routes(app):
                 return render_template('txt_export_time_series.html')
         return "time series data"
 
-
     @app.route('/return-daily-data', methods=["GET", "POST"])
     def return_daily_data():
         if request.method == "POST":
@@ -135,9 +131,10 @@ def configure_routes(app):
 
             countries = request.form["country"].split(";")
             provinces = request.form["province"].split(";")
+            combined_keys = request.form["combined"].split(";")
 
             dailyReport_df.queryData(
-                countries, provinces, request.form["start-date"], request.form["end-date"], request.form["data-content"])
+                countries, provinces, combined_keys, request.form["start-date"], request.form["end-date"], request.form["data-content"])
 
             if request.form["data-format"] == "json":
                 export_data = dailyReport_df.exportJson()

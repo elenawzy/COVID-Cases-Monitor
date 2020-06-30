@@ -27,13 +27,16 @@ class DailyReportData(parseDataInterface.DataInterface):
         self.original_data = concatenated_df
         self.parsed_data = concatenated_df
 
-    def queryData(self, countries=[], provinces=[], startingDate='', endingDate='', data_content=''):
+    def queryData(self, countries=[], provinces=[], combined=[], startingDate='', endingDate='', data_content=''):
         df = self.original_data
         if countries != ['']:
             df = queryCountry(df, countries)
 
         if provinces != ['']:
             df = queryProvince(df, provinces)
+
+        if combined != ['']:
+            df = queryCombined_Key(df, combined)
 
         if startingDate != '':
             df = queryTime(df, startingDate, endingDate)
