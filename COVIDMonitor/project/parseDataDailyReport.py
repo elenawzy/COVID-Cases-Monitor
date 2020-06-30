@@ -28,7 +28,7 @@ class DailyReportData(parseDataInterface.DataInterface):
         self.parsed_data = concatenated_df
 
     def queryData(self, countries=[], provinces=[], startingDate='', endingDate='', data_content=''):
-        df = self.parsed_data
+        df = self.original_data
         if countries != ['']:
             df = queryCountry(df, countries)
 
@@ -49,30 +49,31 @@ class DailyReportData(parseDataInterface.DataInterface):
                 df = queryActive(df)
         self.parsed_data = df
 
-    def exportJson(self):
+    def exportJson(self, path=PATH):
         time_changed = self.parsed_data
         time_changed['Last_Update'] = time_changed['Last_Update'].dt.strftime(
             '%m/%d/%Y')
         time_changed.to_json(os.path.join(
-            PATH, "json_export_daily_report.json"))
+            path, "json_export_daily_report.json"))
         return time_changed.to_json()
 
-    def exportCsv(self):
+    def exportCsv(self, path=PATH):
         time_changed = self.parsed_data
         time_changed['Last_Update'] = time_changed['Last_Update'].dt.strftime(
             '%m/%d/%Y')
         time_changed.to_csv(os.path.join(
-            PATH, "csv_export_daily_report.csv"), index=False)
+            path, "csv_export_daily_report.csv"), index=False)
         return time_changed.to_csv(index=False)
 
-    def exportTxt(self):
+    def exportTxt(self, path=PATH, temp=TEMPLATES):
         time_changed = self.parsed_data
         time_changed['Last_Update'] = time_changed['Last_Update'].dt.strftime(
             '%m/%d/%Y')
-        with open(os.path.join(PATH, 'txt_export_daily_report.html'), 'w') as fo1:
+        with open(os.path.join(path, 'txt_export_daily_report.html'), 'w') as fo1:
             fo1.write(time_changed.to_html(index=False))
-        with open(os.path.join(TEMPLATES, 'txt_export_daily_report.html'), 'w') as fo2:
-            fo2.write(time_changed.to_html(index=False))
+        if temp != '':
+            with open(os.path.join(temp, 'txt_export_daily_report.html'), 'w') as fo2:
+                fo2.write(time_changed.to_html(index=False))
 
 
 def queryCountry(dataframe, countries):
@@ -122,11 +123,10 @@ def queryActive(dataframe):
 
 def queryTime(dataframe, start, end):
     start = start + " 00:00:00"
-    print(start)
-    # end = end + " 00:00:00"
     startdt = datetime.strptime(start, '%m/%d/%Y %H:%M:%S')
     if end != '':
-        enddt = datetime.strptime(end, '%m/%d/%Y')
+        end = end + " 00:00:00"
+        enddt = datetime.strptime(end, '%m/%d/%Y %H:%M:%S')
         mask = (dataframe['Last_Update'] >= startdt) & (
             dataframe['Last_Update'] <= enddt)
         queried_data = dataframe.loc[mask]
