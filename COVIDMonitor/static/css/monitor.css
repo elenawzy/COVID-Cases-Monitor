@@ -15,3 +15,8 @@ h3 {
 .button-width {
   width: 170px;
 }
+
+body {
+  background-image: url("../images/covid-background.jpg");
+  background-size: cover;
+}
