@@ -62,30 +62,6 @@ def test_filter_time_series():
 
     assert response.status_code == 200
 
-def test_post_return_daily_data():
-    app = Flask(__name__)
-    configure_routes(app)
-    data_dict = dict([("province", ""), ("country", "Canada"),
-    ("combined", ''), ("start-date", '06/06/2020'), ("end-date", ''),
-    ("data-content", 'active'), ("data-format", "csv")])
-
-    data_dictt = {"province": "", "country": "Canada", "combined": "",
-                "start-date": '06/06/2020', "end-date": '',
-                "data-content": 'active', "data-format": "csv"}
-    response = app.test_client().post(
-        '/return-daily-data', content_type='multipart/form-data', buffered=True,
-        data=data_dictt)
-    assert response.status_code == 200
-
-def test_post_return_time_series_data():
-    app = Flask(__name__)
-    configure_routes(app)
-    data_dict = dict([("province", ''), ("country", "Canada"),
-    ("start-date", '06/05/2020'), ("end-date", '06/10/2020'), ("data-format", "csv")])
-    response = app.test_client().post('/return-time-series-data', buffered=True,
-        content_type='multipart/form-data', data=data_dict)
-    assert response.status_code == 200
-
 def test_get_return_daily_data():
     app = Flask(__name__)
     configure_routes(app)
