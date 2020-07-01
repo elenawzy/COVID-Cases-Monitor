@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, abort, jsonify
 from werkzeug.utils import secure_filename
 import os
 import sys
@@ -19,6 +19,27 @@ dailyReport_df = parseDataDailyReport.DailyReportData()
 
 
 def configure_routes(app):
+    class InvalidUsage(Exception):
+        status_code = 400
+
+        def __init__(self, message, status_code=None, payload=None):
+            Exception.__init__(self)
+            self.message = message
+            if status_code is not None:
+                self.status_code = status_code
+            self.payload = payload
+
+        def to_dict(self):
+            rv = dict(self.payload or ())
+            rv['message'] = self.message
+            return rv
+
+    @app.errorhandler(InvalidUsage)
+    def handle_invalid_usage(error):
+        response = jsonify(error.to_dict())
+        response.status_code = error.status_code
+        return response
+
     @app.route('/')
     def welcome_monitor():
         return render_template('monitor.html')
@@ -28,56 +49,58 @@ def configure_routes(app):
         if request.method == "POST":
             if 'data-file' not in request.files:
                 print('no data file sent')
-                return redirect('/')
             if "data-file" in request.files:
                 file = request.files["data-file"]
                 # check for empty file
                 if file.filename == '':
-                    print('empty file')
+
+                    return redirect('/')
                 # time series file
                 elif "time_series" in file.filename:
                     filename = secure_filename(file.filename)
                     # if file already exists
                     if filename in os.listdir(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER)):
-                        print('updating time series file')
+
                         os.remove(os.path.join(
                             app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER, filename))
                         file.save(os.path.join(
                             app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER, filename))
-                        print('updated time series file')
+
                         timeSeries_df.readData(os.path.join(
                             app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER))
-                        print(timeSeries_df.parsed_data)
+
                     else:
                         file.save(os.path.join(
                             app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER, filename))
-                        print("time series file saved!")
+
                         timeSeries_df.readData(os.path.join(
                             app.config["ROOT_PATH"], CSV_FOLDER, TIME_SERIES_FOLDER))
-                        print(timeSeries_df.parsed_data)
+
                 # daily report file
                 else:
                     filename = secure_filename(file.filename)
                     # if file already exists
                     if filename in os.listdir(os.path.join(app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER)):
-                        print('updating daily report file')
+
                         os.remove(os.path.join(
                             app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER, filename))
                         file.save(os.path.join(
                             app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER, filename))
-                        print('updated daily report file')
+
                         dailyReport_df.readData(os.path.join(
                             app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER))
-                        print(dailyReport_df.parsed_data)
+
                     else:
                         file.save(os.path.join(
                             app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER, filename))
-                        print("time daily report saved!")
+
                         dailyReport_df.readData(os.path.join(
                             app.config["ROOT_PATH"], CSV_FOLDER, DAILY_REPORT_FOLDER))
-                        print(dailyReport_df.parsed_data)
-                return redirect('/')
-        return render_template('monitor.html')
+
+            return redirect('/')
+        if request.method == "GET":
+            print('Tried to reach add file with GET')
+            raise InvalidUsage('This url is only for POST methods, please go back and add a file', status_code=403)
 
     @app.route('/filter-time-series', methods=["GET", "POST"])
     def filter_time_series():
@@ -90,14 +113,6 @@ def configure_routes(app):
     @app.route('/return-time-series-data', methods=["GET", "POST"])
     def return_time_series_data():
         if request.method == "POST":
-            print(request.form["province"])
-            print(request.form["country"])
-            print(request.form["start-date"])
-            if request.form["end-date"] == '':
-                print("end-date empty string")
-            else:
-                print(request.form["end-date"])
-            print(request.form["data-format"])
 
             countries = request.form["country"].split(";")
             provinces = request.form["province"].split(";")
@@ -114,20 +129,13 @@ def configure_routes(app):
             else:
                 timeSeries_df.exportTxt()
                 return render_template('txt_export_time_series.html')
-        return "time series data"
+        if request.method == "GET":
+            print('Tried to reach return time series with GET')
+            raise InvalidUsage('This url is only for POST methods, please go back and add your filters', status_code=403)
 
     @app.route('/return-daily-data', methods=["GET", "POST"])
     def return_daily_data():
         if request.method == "POST":
-            print(request.form["province"])
-            print(request.form["country"])
-            print(request.form["start-date"])
-            if request.form["end-date"] == '':
-                print("end-date empty string")
-            else:
-                print(request.form["end-date"])
-            print(request.form["data-content"])
-            print(request.form["data-format"])
 
             countries = request.form["country"].split(";")
             provinces = request.form["province"].split(";")
@@ -145,4 +153,6 @@ def configure_routes(app):
             else:
                 dailyReport_df.exportTxt()
                 return render_template('txt_export_daily_report.html')
-        return "daily report data"
+        if request.method == "GET":
+            print('Tried to reach return daily report with GET')
+            raise InvalidUsage('This url is only for POST methods, please go back and add your filters', status_code=403)

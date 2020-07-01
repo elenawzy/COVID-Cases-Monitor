@@ -2,6 +2,7 @@ from COVIDMonitor.main import app
 from COVIDMonitor.project import parseDataDailyReport
 from COVIDMonitor.project import parseDataTimeSeries
 from COVIDMonitor.project.routes import configure_routes
+from io import BytesIO
 import pandas as pd
 import os
 from datetime import datetime
@@ -15,6 +16,37 @@ def test_monitor():
 
     assert response.status_code == 200
 
+def test_post_add_file_daily():
+    app = Flask(__name__)
+    configure_routes(app)
+    response = app.test_client().post('/addfile',
+    data={"file": (BytesIO(b'content'), "06-05-2020.csv")}
+    )
+    # check for redirect
+    assert response.status_code == 302
+
+def test_post_add_file_time_series():
+    app = Flask(__name__)
+    configure_routes(app)
+    response = app.test_client().post('/addfile',
+    data={"file": (BytesIO(b'content'), "time_series_covid19_confirmed_global.csv")}
+    )
+    # check for redirect
+    assert response.status_code == 302
+
+def test_post_no_file_sent():
+    app = Flask(__name__)
+    configure_routes(app)
+    response = app.test_client().post('/addfile')
+    # check for redirect
+    assert response.status_code == 302
+
+def test_get_add_file():
+    app = Flask(__name__)
+    configure_routes(app)
+    response = app.test_client().get('/addfile')
+
+    assert response.status_code == 403
 
 def test_filter_daily():
     app = Flask(__name__)
@@ -23,7 +55,6 @@ def test_filter_daily():
 
     assert response.status_code == 200
 
-
 def test_filter_time_series():
     app = Flask(__name__)
     configure_routes(app)
@@ -31,6 +62,19 @@ def test_filter_time_series():
 
     assert response.status_code == 200
 
+def test_get_return_daily_data():
+    app = Flask(__name__)
+    configure_routes(app)
+    response = app.test_client().get('/return-daily-data')
+
+    assert response.status_code == 403
+
+def test_get_return_time_series_data():
+    app = Flask(__name__)
+    configure_routes(app)
+    response = app.test_client().get('/return-time-series-data')
+
+    assert response.status_code == 403
 
 def test_daily_initial_data():
     daily_report = parseDataDailyReport.DailyReportData()
