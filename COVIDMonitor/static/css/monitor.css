@@ -1,0 +1,22 @@
+h1 {
+  padding: 50px;
+  text-align: center;
+}
+h3 {
+  padding-top: 30px;
+  padding-bottom: 10px;
+}
+
+.btn {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.button-width {
+  width: 170px;
+}
+
+body {
+  background-image: url("../images/covid-background.jpg");
+  background-size: cover;
+}
