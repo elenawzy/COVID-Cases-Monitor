@@ -1,4 +1,4 @@
-# Assignment 2 Documentation
+# Documentation
 
 ## Instructions to run app
 
@@ -25,7 +25,7 @@ Running tests are done the same way as the starter handout, with:
 ```
 pytest --cov-report term --cov=COVIDMonitor tests/unit_tests.py (in the root directory)
 ```
-This will also show the coverage, which is an overall 81%.
+This will also show the coverage.
 
 ## Pair Programming
 
